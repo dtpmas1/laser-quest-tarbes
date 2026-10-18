@@ -1,0 +1,88 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalURL?: string;
+}
+
+const {
+  title,
+  description,
+  canonicalURL = `https://tarbes.laserquest.fr${Astro.url.pathname}`,
+} = Astro.props;
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": ["EntertainmentBusiness", "LocalBusiness"],
+  "name": "Laser Quest Tarbes",
+  "description": "Centre de loisirs indoor et Laser Game à Tarbes sur un labyrinthe de 300 m².",
+  "url": "https://tarbes.laserquest.fr/",
+  "telephone": "+33562960217",
+  "priceRange": "€€",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "1 avenue des Tilleuls",
+    "addressLocality": "Tarbes",
+    "postalCode": "65000",
+    "addressCountry": "FR"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 43.2329,
+    "longitude": 0.0781
+  },
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Tuesday", "opens": "16:00", "closes": "22:00" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Wednesday", "opens": "14:00", "closes": "22:00" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "16:00", "closes": "23:00" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "16:00", "closes": "23:59" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "14:00", "closes": "23:59" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "14:00", "closes": "19:00" }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="fr" class="dark scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | Laser Quest Tarbes (65)</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
+  </head>
+  <body class="min-h-screen flex flex-col justify-between">
+    <header class="border-b border-red-600/30 bg-black/90 p-4 sticky top-0 z-50 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+        <a href="/" class="font-black text-xl tracking-widest text-white">
+          LASER QUEST <span class="neon-text-red">TARBES</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-6 text-xs font-bold uppercase tracking-wider text-zinc-300">
+          <a href="/#offres" class="hover:text-red-400 transition">Formules</a>
+          <a href="/#tariff-simulator" class="hover:text-red-400 transition">Simulateur</a>
+          <a href="/#acces-horaires" class="hover:text-red-400 transition">Horaires & Accès</a>
+          <a href="/#faq" class="hover:text-red-400 transition">FAQ</a>
+        </nav>
+        <div class="flex items-center gap-4">
+          <a href="tel:+33562960217" class="neon-text-red font-bold tracking-wider text-sm">05 62 96 02 17</a>
+          <a href="/#booking-module" class="rounded-lg neon-btn-red px-4 py-2 text-xs font-bold uppercase tracking-wider">
+            Réserver
+          </a>
+        </div>
+      </div>
+    </header>
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <footer class="border-t border-red-900/40 bg-black p-8 text-center text-sm text-zinc-400 space-y-2">
+      <p class="font-bold text-white">LASER QUEST TARBES</p>
+      <p>1 avenue des Tilleuls, 65000 Tarbes — Tél : <a href="tel:+33562960217" class="text-red-400 hover:underline">05 62 96 02 17</a></p>
+      <p class="text-xs text-zinc-500 pt-2">
+        <a href="/mentions-legales" class="hover:text-red-400 underline transition">Mentions légales & Politique de confidentialité</a>
+      </p>
+    </footer>
+  </body>
+</html>

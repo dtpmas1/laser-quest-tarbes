@@ -1,0 +1,113 @@
+---
+interface Props {
+  guidapToken: string;
+  defaultActivityId?: string;
+}
+
+const { guidapToken, defaultActivityId = '' } = Astro.props;
+
+const offers = [
+  { id: 'classique', label: 'Parties Classiques (20 min)', badge: 'Dès 8 ans' },
+  { id: 'anniversaire', label: 'Formule Anniversaire', badge: '6-20 enfants' },
+  { id: 'vip-quest', label: 'VIP Quest (Privatisation)', badge: 'Mar-Ven 18h-20h' },
+  { id: 'illimitex', label: 'Formule Illimitex', badge: 'Mer / Jeu / Ven' },
+  { id: 'etudiante', label: 'Formule Étudiante', badge: 'Mer-Ven 17h-21h' },
+  { id: 'mobile-quest', label: 'Mobile Quest (Hors site)', badge: 'Sur devis / Loc' },
+];
+---
+
+<section class="mx-auto max-w-5xl px-4 py-8" id="booking-module">
+  <div class="mb-6">
+    <h2 class="text-lg font-bold text-white mb-3">1. Choisissez votre formule :</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      {offers.map((offer) => (
+        <button
+          type="button"
+          data-activity-id={offer.id}
+          class="guidap-filter-btn flex flex-col items-start justify-between rounded-xl border border-zinc-800 bg-zinc-950/90 p-3.5 text-left transition hover:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-600"
+        >
+          <span class="text-xs font-semibold uppercase tracking-wider neon-text-red mb-1">
+            {offer.badge}
+          </span>
+          <span class="text-sm font-bold text-white">{offer.label}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <div
+    id="guidap-facade-container"
+    data-token={guidapToken}
+    data-default-activity={defaultActivityId}
+    class="relative min-h-[580px] w-full rounded-2xl border border-red-600/30 bg-zinc-950/60 p-6 flex flex-col items-center justify-center neon-box-red"
+  >
+    <div id="guidap-placeholder" class="text-center max-w-md">
+      <p class="text-base font-bold text-white mb-2">
+        Calendrier des disponibilités en temps réel
+      </p>
+      <p class="text-xs text-zinc-400 mb-6">
+        Réservation synchronisée avec notre caisse au 1 av. des Tilleuls, Tarbes.
+      </p>
+      <button
+        type="button"
+        id="guidap-trigger-btn"
+        class="rounded-lg neon-btn-red px-6 py-3 text-sm font-bold uppercase tracking-wider"
+      >
+        Afficher les créneaux disponibles
+      </button>
+    </div>
+
+    <div id="guidap-mount-point" class="w-full hidden"></div>
+  </div>
+</section>
+
+<script>
+  const container = document.getElementById('guidap-facade-container');
+  const placeholder = document.getElementById('guidap-placeholder');
+  const mountPoint = document.getElementById('guidap-mount-point');
+  const triggerBtn = document.getElementById('guidap-trigger-btn');
+  const filterBtns = document.querySelectorAll('.guidap-filter-btn');
+
+  let isGuidapScriptLoaded = false;
+
+  function loadGuidapWidget(activityId = '') {
+    if (!container || !mountPoint || !placeholder) return;
+
+    const token = container.dataset.token || '';
+    const selectedActivity = activityId || container.dataset.defaultActivity || '';
+
+    placeholder.classList.add('hidden');
+    mountPoint.classList.remove('hidden');
+
+    mountPoint.innerHTML = '';
+    const widgetEl = document.createElement('div');
+    widgetEl.className = 'guidap-cart-widget';
+    widgetEl.setAttribute('g-token', token);
+    if (selectedActivity) {
+      widgetEl.setAttribute('g-params', JSON.stringify({ activity: selectedActivity }));
+    }
+    mountPoint.appendChild(widgetEl);
+
+    if (!isGuidapScriptLoaded) {
+      const script = document.createElement('script');
+      script.src = 'https://cart.guidap.net/js/guidap.js';
+      script.async = true;
+      document.head.appendChild(script);
+      isGuidapScriptLoaded = true;
+    } else if ((window as any).Guidap && typeof (window as any).Guidap.init === 'function') {
+      (window as any).Guidap.init();
+    }
+  }
+
+  triggerBtn?.addEventListener('click', () => loadGuidapWidget());
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const target = e.currentTarget as HTMLElement;
+      const actId = target.dataset.activityId || '';
+      filterBtns.forEach((b) => b.classList.remove('border-red-500', 'bg-red-950/30'));
+      target.classList.add('border-red-500', 'bg-red-950/30');
+      loadGuidapWidget(actId);
+    });
+  });
+</script>

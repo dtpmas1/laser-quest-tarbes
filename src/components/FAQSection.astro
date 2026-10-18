@@ -1,0 +1,53 @@
+---
+const faqs = [
+  {
+    question: "À partir de quel âge peut-on jouer chez Laser Quest Tarbes ?",
+    answer: "Le jeu est accessible dès 8 ans (ou environ 1m20 minimum pour porter le harnais confortablement). Notre technologie infrarouge est 100 % inoffensive pour les yeux."
+  },
+  {
+    question: "Faut-il réserver à l'avance et quel est le nombre minimum de joueurs ?",
+    answer: "La réservation en ligne est fortement conseillée pour garantir votre créneau, notamment le week-end et pendant les vacances scolaires. Pour les formules anniversaires, un minimum de 6 participants est requis."
+  },
+  {
+    question: "Quelle tenue est recommandée dans le labyrinthe de 300 m² ?",
+    answer: "Privilégiez des vêtements sombres et confortables. Les chaussures fermées (baskets) sont obligatoires pour circuler en toute sécurité sur les rampes du labyrinthe."
+  },
+  {
+    question: "Où se situe Laser Quest Tarbes et comment stationner ?",
+    answer: "Nous sommes situés au 1 avenue des Tilleuls, 65000 Tarbes. Un stationnement gratuit est accessible à proximité immédiate de l'entrée du centre."
+  }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": f.answer
+    }
+  }))
+};
+---
+
+<section class="mx-auto max-w-5xl px-4 py-12" id="faq">
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <h2 class="text-2xl sm:text-3xl font-black text-white mb-8 text-center tracking-wide">
+    QUESTIONS <span class="neon-text-red">FRÉQUENTES</span>
+  </h2>
+  <div class="space-y-4">
+    {faqs.map((faq) => (
+      <details class="group rounded-2xl border border-red-600/30 bg-zinc-950/80 p-6 transition hover:border-red-500">
+        <summary class="flex cursor-pointer list-none items-center justify-between font-bold text-white">
+          <span>{faq.question}</span>
+          <span class="ml-4 text-red-500 transition group-open:rotate-45 text-xl font-black">+</span>
+        </summary>
+        <p class="mt-4 text-sm text-zinc-300 leading-relaxed border-t border-zinc-800 pt-4">
+          {faq.answer}
+        </p>
+      </details>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,87 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GuidapBooking from '../../components/GuidapBooking.astro';
+
+export async function getStaticPaths() {
+  const offres = await getCollection('offres');
+  return offres.map((offre) => ({
+    params: { id: offre.id.replace(/\.md$/, '') },
+    props: { offre },
+  }));
+}
+
+const { offre } = Astro.props;
+const { Content } = await render(offre);
+
+const offerSchema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": `${offre.data.title} - Laser Quest Tarbes`,
+  "description": offre.data.description,
+  "brand": {
+    "@type": "Brand",
+    "name": "Laser Quest Tarbes"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": `https://tarbes.laserquest.fr/offres/${offre.id.replace(/\.md$/, '')}`,
+    "priceCurrency": "EUR",
+    "price": offre.data.price,
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2026-01-01"
+  }
+};
+---
+
+<BaseLayout title={offre.data.seoTitle} description={offre.data.description}>
+  <script type="application/ld+json" set:html={JSON.stringify(offerSchema)} />
+
+  <article class="py-12 px-4 max-w-5xl mx-auto">
+    <div class="mb-8">
+      <a href="/" class="text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-red-400 transition">
+        ← Retour à l'accueil
+      </a>
+    </div>
+
+    <div class="rounded-3xl border border-red-600/40 bg-zinc-950/90 p-8 sm:p-12 neon-box-red mb-12">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <span class="px-3 py-1 text-xs font-bold uppercase tracking-widest text-red-400 bg-red-950/40 border border-red-600/40 rounded-full">
+          {offre.data.badge}
+        </span>
+        <div class="text-right">
+          <span class="text-4xl font-black text-white">{offre.data.price} €</span>
+          <span class="text-xs text-zinc-400 block">{offre.data.unit}</span>
+        </div>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-black text-white mb-6 tracking-wide">
+        {offre.data.title}
+      </h1>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8 p-4 rounded-2xl bg-black/80 border border-zinc-800 text-center">
+        <div>
+          <span class="block text-xs uppercase text-zinc-400">Joueurs min.</span>
+          <span class="text-lg font-bold text-white">{offre.data.minPlayers} pers.</span>
+        </div>
+        <div>
+          <span class="block text-xs uppercase text-zinc-400">Durée</span>
+          <span class="text-lg font-bold text-white">{offre.data.duration}</span>
+        </div>
+        <div class="col-span-2 sm:col-span-1">
+          <span class="block text-xs uppercase text-zinc-400">Lieu</span>
+          <span class="text-sm font-bold neon-text-red">Tarbes (300 m²)</span>
+        </div>
+      </div>
+
+      <div class="space-y-4 text-zinc-300 leading-relaxed [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-6 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-red-400 [&_h3]:mt-4 [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-1 [&_strong]:text-white">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  <GuidapBooking 
+    guidapToken="votre-token-guidap-par-defaut" 
+    defaultActivityId={offre.data.guidapActivityId} 
+  />
+</BaseLayout>

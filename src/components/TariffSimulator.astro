@@ -1,0 +1,94 @@
+---
+// Composant de simulation tarifaire en temps réel pour Laser Quest Tarbes
+---
+
+<section class="mx-auto max-w-5xl px-4 py-12" id="tariff-simulator">
+  <div class="rounded-3xl border border-red-600/40 bg-zinc-950/90 p-6 sm:p-10 neon-box-red backdrop-blur-md">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <h2 class="text-2xl sm:text-3xl font-black text-white mb-3 tracking-wide">
+        SIMULATEUR DE <span class="neon-text-red">TARIFS</span>
+      </h2>
+      <p class="text-sm text-zinc-300">
+        Estimez instantanément le montant de votre session au labyrinthe de Tarbes (1 av. des Tilleuls) selon votre formule.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div class="space-y-6">
+        <div>
+          <label for="formula-select" class="block text-xs font-bold uppercase tracking-wider text-red-500 mb-2">
+            1. Choisissez la formule
+          </label>
+          <select
+            id="formula-select"
+            class="w-full rounded-xl border border-red-900/60 bg-black p-3.5 text-sm font-semibold text-white focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-600"
+          >
+            <option value="classique" data-price="10">Partie Classique (1 session de 20 min)</option>
+            <option value="double" data-price="18">Formule 2 Parties</option>
+            <option value="anniversaire" data-price="15">Formule Anniversaire (Goûter inclus)</option>
+            <option value="illimitex" data-price="22">Formule Illimitex (Soirée)</option>
+          </select>
+        </div>
+
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label for="players-range" class="text-xs font-bold uppercase tracking-wider text-red-500">
+              2. Nombre de joueurs
+            </label>
+            <span id="players-value" class="text-lg font-black text-white bg-black px-3 py-1 rounded-lg border border-red-600/50">4</span>
+          </div>
+          <input
+            id="players-range"
+            type="range"
+            min="1"
+            max="20"
+            value="4"
+            class="w-full h-2 bg-black rounded-lg appearance-none cursor-pointer accent-red-600"
+          />
+        </div>
+      </div>
+
+      <div class="flex flex-col items-center justify-center rounded-2xl border border-red-600/30 bg-black/90 p-8 text-center shadow-inner">
+        <p class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">Total estimé</p>
+        <div class="flex items-baseline justify-center gap-1 mb-4">
+          <span id="total-price" class="text-5xl font-black text-white">40</span>
+          <span class="text-2xl font-bold neon-text-red">€</span>
+        </div>
+        <p id="unit-price-text" class="text-xs text-zinc-400 mb-6">Soit 10,00 € par joueur</p>
+        <a
+          href="#booking-module"
+          class="w-full rounded-xl neon-btn-red py-3.5 text-sm font-bold uppercase tracking-wider"
+        >
+          Réserver ce créneau
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const formulaSelect = document.getElementById('formula-select') as HTMLSelectElement;
+  const playersRange = document.getElementById('players-range') as HTMLInputElement;
+  const playersValue = document.getElementById('players-value') as HTMLElement;
+  const totalPrice = document.getElementById('total-price') as HTMLElement;
+  const unitPriceText = document.getElementById('unit-price-text') as HTMLElement;
+
+  function updateSimulation() {
+    if (!formulaSelect || !playersRange || !playersValue || !totalPrice || !unitPriceText) return;
+
+    const selectedOption = formulaSelect.options[formulaSelect.selectedIndex];
+    const unitPrice = parseFloat(selectedOption.dataset.price || '10');
+    const playersCount = parseInt(playersRange.value, 10) || 1;
+
+    playersValue.textContent = playersCount.toString();
+    const total = unitPrice * playersCount;
+
+    totalPrice.textContent = total.toFixed(0);
+    unitPriceText.textContent = `Soit ${unitPrice.toFixed(2)} € par joueur`;
+  }
+
+  formulaSelect?.addEventListener('change', updateSimulation);
+  playersRange?.addEventListener('input', updateSimulation);
+
+  updateSimulation();
+</script>

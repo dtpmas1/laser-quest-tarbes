@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #050505;
+    background-image: radial-gradient(circle at 50% 0%, rgba(220, 38, 38, 0.15) 0%, transparent 60%);
+    color: #f8fafc;
+    font-family: system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.neon-text-red {
+  color: #ef4444;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.8), 0 0 25px rgba(220, 38, 38, 0.6);
+}
+
+.neon-box-red {
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.35), inset 0 0 15px rgba(220, 38, 38, 0.15);
+}
+
+.neon-btn-red {
+  background-color: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.7);
+  transition: all 0.2s ease-in-out;
+}
+
+.neon-btn-red:hover {
+  background-color: #ef4444;
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.95);
+}

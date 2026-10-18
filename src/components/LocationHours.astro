@@ -1,0 +1,112 @@
+---
+const regularHours = [
+  { day: "Lundi", hours: "Fermé (Ouvert sur réservation groupe dès 10 pers.)", closed: true },
+  { day: "Mardi", hours: "16h00 – 22h00", closed: false },
+  { day: "Mercredi", hours: "14h00 – 22h00", closed: false },
+  { day: "Jeudi", hours: "16h00 – 23h00", closed: false },
+  { day: "Vendredi", hours: "16h00 – 00h00", closed: false },
+  { day: "Samedi", hours: "14h00 – 00h00", closed: false },
+  { day: "Dimanche", hours: "14h00 – 19h00", closed: false },
+];
+---
+
+<section class="mx-auto max-w-5xl px-4 py-12" id="acces-horaires">
+  <div class="text-center max-w-2xl mx-auto mb-10">
+    <h2 class="text-2xl sm:text-3xl font-black text-white mb-3 tracking-wide">
+      HORAIRES & <span class="neon-text-red">ACCÈS</span>
+    </h2>
+    <p class="text-sm text-zinc-300">
+      Retrouvez-nous au 1 avenue des Tilleuls, 65000 Tarbes. Parking gratuit à proximité immédiate.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+    <!-- Tableau des horaires -->
+    <div class="rounded-3xl border border-red-600/40 bg-zinc-950/90 p-6 sm:p-8 neon-box-red flex flex-col justify-between">
+      <div>
+        <div class="flex items-center justify-between mb-6 pb-3 border-b border-zinc-800">
+          <h3 class="text-lg font-black text-white uppercase tracking-wider">Période Scolaire</h3>
+          <span class="px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-red-400 bg-red-950/40 border border-red-600/30 rounded-full">
+            Zone C (Occitanie)
+          </span>
+        </div>
+
+        <ul class="space-y-3 text-sm">
+          {regularHours.map((item) => (
+            <li class="flex justify-between items-center py-1.5 border-b border-zinc-900 last:border-none">
+              <span class="font-bold text-zinc-200">{item.day}</span>
+              <span class={item.closed ? "text-xs text-zinc-500 italic text-right max-w-[220px]" : "font-bold neon-text-red"}>
+                {item.hours}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="mt-6 rounded-2xl bg-red-950/20 border border-red-600/30 p-4 text-xs text-zinc-300 leading-relaxed">
+        <strong class="text-white block mb-1 uppercase tracking-wider">Vacances scolaires & Jours fériés :</strong>
+        Ouverture tous les jours dès <span class="text-red-400 font-bold">14h00</span>. Groupes, centres aérés et entreprises accueillis dès 9h00 sur réservation.
+      </div>
+    </div>
+
+    <!-- Carte Interactive (Facade Pattern) -->
+    <div class="rounded-3xl border border-red-600/40 bg-zinc-950/90 p-6 sm:p-8 neon-box-red flex flex-col justify-between">
+      <div>
+        <h3 class="text-lg font-black text-white uppercase tracking-wider mb-2">Localisation</h3>
+        <p class="text-sm text-zinc-400 mb-6">
+          1 avenue des Tilleuls, 65000 Tarbes — À 5 min du centre-ville et de la zone universitaire.
+        </p>
+      </div>
+
+      <div 
+        id="map-facade" 
+        class="relative w-full h-72 rounded-2xl border border-zinc-800 bg-black overflow-hidden flex flex-col items-center justify-center p-6 text-center"
+      >
+        <div id="map-placeholder" class="z-10 max-w-xs">
+          <p class="text-sm font-bold text-white mb-2">Carte interactive Google Maps</p>
+          <p class="text-xs text-zinc-400 mb-5">
+            Cliquez ci-dessous pour charger le plan interactif ou lancer votre itinéraire GPS.
+          </p>
+          <div class="flex flex-col gap-2.5">
+            <button
+              type="button"
+              id="load-map-btn"
+              class="rounded-xl neon-btn-red px-4 py-2.5 text-xs font-bold uppercase tracking-wider"
+            >
+              Afficher la carte
+            </button>
+            <a
+              href="https://www.google.com/maps/dir/?api=1&destination=Laser+Quest+Tarbes+1+avenue+des+Tilleuls+65000+Tarbes"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2.5 text-xs font-bold text-white hover:border-red-500 transition"
+            >
+              Ouvrir dans Google Maps ↗
+            </a>
+          </div>
+        </div>
+        <div id="map-mount" class="w-full h-full hidden"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const loadMapBtn = document.getElementById('load-map-btn');
+  const mapPlaceholder = document.getElementById('map-placeholder');
+  const mapMount = document.getElementById('map-mount');
+
+  loadMapBtn?.addEventListener('click', () => {
+    if (!mapPlaceholder || !mapMount) return;
+    mapPlaceholder.classList.add('hidden');
+    mapMount.classList.remove('hidden');
+
+    const iframe = document.createElement('iframe');
+    iframe.src = "https://maps.google.com/maps?q=Laser%20Quest%20Tarbes%201%20avenue%20des%20Tilleuls%2065000%20Tarbes&t=&z=15&ie=UTF8&iwloc=&output=embed";
+    iframe.className = "w-full h-full border-0";
+    iframe.loading = "lazy";
+    iframe.referrerPolicy = "no-referrer-when-downgrade";
+    iframe.title = "Plan d'accès Laser Quest Tarbes";
+    mapMount.appendChild(iframe);
+  });
+</script>

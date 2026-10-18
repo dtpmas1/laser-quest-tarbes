@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Mentions Légales & Confidentialité" 
+  description="Mentions légales, conditions d'utilisation et politique de protection des données (RGPD) du centre Laser Quest Tarbes (65000)."
+>
+  <article class="py-12 px-4 max-w-4xl mx-auto">
+    <div class="mb-8">
+      <a href="/" class="text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-red-400 transition">
+        ← Retour à l'accueil
+      </a>
+    </div>
+
+    <div class="rounded-3xl border border-red-600/40 bg-zinc-950/90 p-8 sm:p-12 neon-box-red space-y-8 text-sm text-zinc-300 leading-relaxed">
+      <h1 class="text-3xl sm:text-4xl font-black text-white tracking-wide">
+        MENTIONS <span class="neon-text-red">LÉGALES</span> & RGPD
+      </h1>
+
+      <section class="space-y-2">
+        <h2 class="text-lg font-bold text-white uppercase tracking-wider">1. Éditeur du site</h2>
+        <p>
+          <strong>Nom de l'établissement :</strong> Laser Quest Tarbes<br />
+          <strong>Adresse :</strong> 1 avenue des Tilleuls, 65000 Tarbes, France<br />
+          <strong>Téléphone :</strong> 05 62 96 02 17<br />
+          <strong>Activité :</strong> Centre de loisirs indoor, Laser Game et location d'équipements récréatifs.
+        </p>
+      </section>
+
+      <section class="space-y-2">
+        <h2 class="text-lg font-bold text-white uppercase tracking-wider">2. Protection des données personnelles (RGPD) & Cookies</h2>
+        <p>
+          Ce site est conçu selon une architecture statique respectueuse de la vie privée (<em>Privacy-by-Design</em>). Aucun cookie publicitaire ou traceur tiers n'est déposé automatiquement lors de votre arrivée sur le site.
+        </p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><strong>Module de réservation (Guidap) :</strong> Le script de réservation n'est chargé qu'après une action volontaire de votre part (clic sur une formule ou sur le bouton d'affichage des créneaux). Les données saisies lors de la réservation sont traitées uniquement pour la gestion de votre session et la facturation en caisse.</li>
+          <li><strong>Carte interactive (Google Maps) :</strong> La carte externe est isolée par défaut et ne s'active qu'après clic explicite sur « Afficher la carte ».</li>
+        </ul>
+      </section>
+
+      <section class="space-y-2">
+        <h2 class="text-lg font-bold text-white uppercase tracking-wider">3. Droits d'accès et de rectification</h2>
+        <p>
+          Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification et de suppression des données vous concernant. Vous pouvez exercer ce droit directement auprès de l'accueil du centre au 1 avenue des Tilleuls, 65000 Tarbes, ou par téléphone au 05 62 96 02 17.
+        </p>
+      </section>
+    </div>
+  </article>
+</BaseLayout>

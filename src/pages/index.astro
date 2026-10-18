@@ -1,16 +1,85 @@
 ---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TariffSimulator from '../components/TariffSimulator.astro';
+import GuidapBooking from '../components/GuidapBooking.astro';
+import LocationHours from '../components/LocationHours.astro';
+import FAQSection from '../components/FAQSection.astro';
+import homepageData from '../data/homepage.json';
+
+const offres = (await getCollection('offres')).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout 
+  title="Accueil - Laser Game & Loisirs" 
+  description="Découvrez Laser Quest Tarbes, votre centre de Laser Game sur un labyrinthe de 300 m² au 1 avenue des Tilleuls (65000)."
+>
+  {homepageData.backgroundType === 'image' && homepageData.backgroundImage && (
+    <div class="fixed inset-0 z-[-1] bg-cover bg-center bg-no-repeat opacity-25" style={`background-image: url('${homepageData.backgroundImage}');`}></div>
+  )}
+  {homepageData.backgroundType === 'video' && homepageData.backgroundVideo && (
+    <video class="fixed inset-0 z-[-1] w-full h-full object-cover opacity-25" autoplay loop muted playsinline>
+      <source src={homepageData.backgroundVideo} type="video/mp4" />
+    </video>
+  )}
+
+  <div class="py-12 px-4 max-w-5xl mx-auto text-center">
+    <span class="inline-block px-4 py-1.5 mb-6 text-xs font-bold uppercase tracking-widest text-red-400 bg-red-950/40 border border-red-600/40 rounded-full neon-box-red">
+      Hautes-Pyrénées (65)
+    </span>
+    <h1 class="text-4xl sm:text-6xl font-black tracking-widest text-white mb-6">
+      VIVEZ L'EXPÉRIENCE <span class="neon-text-red">LASER QUEST</span>
+    </h1>
+    <p class="text-lg text-zinc-300 max-w-2xl mx-auto mb-8">
+      Affrontez vos amis ou collègues dans notre labyrinthe indoor de 300 m² à Tarbes. Immersion totale, ambiance néon rouge et stratégie garanties !
+    </p>
+
+    <div class="inline-flex flex-col items-center rounded-2xl border border-red-600/40 bg-zinc-950/80 p-6 neon-box-red backdrop-blur-md mb-6">
+      <p class="text-xs font-bold uppercase tracking-widest neon-text-red mb-1">Centre de loisirs indoor</p>
+      <p class="text-base font-bold text-white mb-1">1 avenue des Tilleuls, 65000 Tarbes</p>
+      <p class="text-sm text-zinc-400">Tél : <a href="tel:+33562960217" class="neon-text-red font-semibold hover:underline">05 62 96 02 17</a></p>
+    </div>
+  </div>
+
+  <section class="mx-auto max-w-5xl px-4 py-8" id="offres">
+    <h2 class="text-2xl sm:text-3xl font-black text-white mb-8 text-center tracking-wide">
+      NOS <span class="neon-text-red">FORMULES</span> & ÉVÉNEMENTS
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {offres.map((offre) => (
+        <a 
+          href={`/offres/${offre.id.replace(/\.md$/, "")}`}
+          class="group flex flex-col justify-between rounded-2xl border border-red-600/30 bg-zinc-950/80 p-6 transition hover:border-red-500 neon-box-red"
+        >
+          <div>
+            <div class="flex justify-between items-start gap-2 mb-4">
+              <span class="px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-red-400 bg-red-950/40 border border-red-600/30 rounded-full">
+                {offre.data.badge}
+              </span>
+              <span class="text-xl font-black text-white shrink-0">
+                {offre.data.price} €
+              </span>
+            </div>
+            <h3 class="text-xl font-black text-white group-hover:text-red-400 transition mb-2">
+              {offre.data.title}
+            </h3>
+            <p class="text-sm text-zinc-400 mb-6">
+              {offre.data.description}
+            </p>
+          </div>
+          <span class="text-xs font-bold uppercase tracking-wider neon-text-red group-hover:underline">
+            Découvrir & réserver →
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <TariffSimulator />
+
+  <GuidapBooking guidapToken="votre-token-guidap-par-defaut" />
+
+  <LocationHours />
+
+  <FAQSection />
+</BaseLayout>
