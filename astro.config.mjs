@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import react from '@astrojs/react';
 import keystatic from '@keystatic/astro';
+import netlify from '@astrojs/netlify';
 
 export default defineConfig({
   site: 'https://tarbes.laserquest.fr',
@@ -10,5 +11,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  output: 'static',
+  output: 'hybrid',
+  adapter: netlify(),
 });
