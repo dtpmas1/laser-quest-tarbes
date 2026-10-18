@@ -2,9 +2,9 @@ import { config, fields, collection, singleton } from '@keystatic/core';
 
 export default config({
   storage: {
-    kind: process.env.NODE_ENV === 'development' ? 'local' : 'github',
-    repo: 'dtpmas1/laser-quest-tarbes'
-  },
+  kind: process.env.NODE_ENV === 'development' ? 'local' : 'github',
+  repo: 'dtpmas1/laser-quest-tarbes'
+},
   ui: {
     brand: {
       name: 'Laser Quest Tarbes',
